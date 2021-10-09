@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <iostream>
+#include <sstream>
 #include "Edge.h"
-
+#include "Iterable.h"
 
 using namespace std;
 
@@ -10,26 +11,13 @@ using namespace std;
 
 
 template<typename T>
-class Graph {
+class Graph : public Iterable<T> {
 private:
     vector<Node<T> *> nodes;
     vector<Edge<T> *> edges;
     vector<int> nodeIds;
 
     void dfs(int id, bool visited[]);
-
-//    template<typename I>
-//    class Iterator : public std::iterator<std::input_iterator_tag, Node<I>, Node<I>, const Node<I>*, Node<I>> {
-//    private:
-//        int pointer;
-//
-//    public:
-//        explicit Iterator(int num) : pointer(num) {}
-//
-//        Iterator<I>& operator++() {pointer++; return *this;}
-//
-//        Node<I> operator*() const {return *this;}
-//    };
 
 public:
     Graph() = default;
@@ -54,11 +42,10 @@ public:
 
     void depthSearch();
 
-//    Iterator<T> begin();
-//
-//    Iterator<T> end();
-//
-//    void test();
+    void itrBypass();
+
+    Iterator<T> *getIterator() override;
+
 };
 
 template<typename T>
@@ -153,27 +140,26 @@ void Graph<T>::dfs(int id, bool visited[]) {
 template<typename T>
 Node<T> *Graph<T>::getNodeById(int id) {
     try {
-        return nodes[id - 1];
-    } catch (...) {
-        cout << "No such node";
+        return nodes.at(id);
+    } catch (std::out_of_range&) {
+        cout << "No such node\n";
     }
 }
 
-//template<typename T>
-//typename Graph<T>::template Iterator<T> Graph<T>::begin() {
-//    return Graph<T>::Iterator<T>(0);
-//}
-//
-//template<typename T>
-//typename Graph<T>::template Iterator<T> Graph<T>::end() {
-//    return Graph<T>::Iterator<T>(nodes.size() - 1);
-//}
-//
-//template<typename T>
-//void Graph<T>::test() {
-//    auto iterator = begin();
-//    cout << *iterator;
-//}
+template<typename T>
+void Graph<T>::itrBypass() {
+    stringstream stream;
+    Iterator<T> *itr = getIterator();
+    while (itr->hasNext()) {
+        stream << itr->current()->getId() << " " << itr->current()->getValue() << "\n";
+        itr->next();
+    }
+    cout << stream.str();
+}
 
+template<typename T>
+Iterator<T> *Graph<T>::getIterator() {
+    return new Iterator<T>(nodes);
+}
 
 #endif

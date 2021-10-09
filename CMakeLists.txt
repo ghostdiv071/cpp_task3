@@ -3,4 +3,4 @@ project(task3)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(task3 main.cpp Node.h Edge.h Graph.h UI.cpp UI.h)
+add_executable(task3 main.cpp Node.h Edge.h Graph.h UI.cpp UI.h Iterable.h Iterator.h)

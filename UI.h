@@ -32,10 +32,11 @@ public:
 
     void deleteStrEdge();
 
-    void chooseGraphForDFS();
+    void dfs();
 
-    template<typename T>
-    void dfs(Graph<T> *graph);
+    void passGraph();
+
+    static char chooseGraphForDFS();
 
 };
 
