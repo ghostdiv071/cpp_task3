@@ -9,7 +9,6 @@ using namespace std;
 #ifndef TASK3_GRAPH_H
 #define TASK3_GRAPH_H
 
-
 template<typename T>
 class Graph : public Iterable<T> {
 private:
@@ -80,26 +79,31 @@ void Graph<T>::addEdge(int from, int to) {
     Node<T> *begin = getNodeById(from);
     Node<T> *end = getNodeById(to);
 
-    for (Edge<T> *edge : edges) {
+    for (Edge<T> *edge: edges) {
         if ((edge->getBegin()->getId() == to && edge->getEnd()->getId() == from) ||
             (edge->getBegin()->getId() == from && edge->getEnd()->getId() == to))
             throw "There is already an edge between these nodes\n";
     }
     edges.push_back(new Edge<T>(begin, end));
-    getNodeById(from)->addNeighbor(end);
-    getNodeById(to)->addNeighbor(begin);
+    begin->addNeighbor(end);
+    end->addNeighbor(begin);
 }
 
 template<typename T>
 void Graph<T>::removeNode(int id) {
-    Node<T> *node = getNodeById(id);
+    Node<T> *node;
+    try {
+        node = getNodeById(id);
+    } catch (std::out_of_range &e) {
+        cout << e.what() << endl;
+    }
 
     for (int i = id; i <= nodes.size(); i++) {
         getNodeById(i)->setId(getNodeById(i)->getId() - 1);
     }
     nodeIds.pop_back();
     nodes.erase(nodes.begin() + id - 1);
-    for (Node<T> *neighbor : node->getNeighbors()) {
+    for (Node<T> *neighbor: node->getNeighbors()) {
         removeEdge(node->getId(), neighbor->getId());
     }
     delete node;
@@ -108,7 +112,7 @@ void Graph<T>::removeNode(int id) {
 template<typename T>
 void Graph<T>::removeEdge(int from, int to) {
     int ptr = 0;
-    for (Edge<T> *edge : edges) {
+    for (Edge<T> *edge: edges) {
         if (edge->getBegin()->getId() == from && edge->getEnd()->getId() == to) {
             edge->getBegin()->removeNeighbor(edge->getEnd()->getId());
             edge->getEnd()->removeNeighbor(edge->getBegin()->getId());
@@ -130,7 +134,7 @@ void Graph<T>::dfs(int id, bool visited[]) {
     visited[id] = true;
     Node<T> *node = getNodeById(id);
     cout << "Node id: " << node->getId() << ", node value: " << node->getValue() << "\n";
-    for (Node<T> *v : getNodeById(id)->getNeighbors()) {
+    for (Node<T> *v: node->getNeighbors()) {
         if (!visited[v->getId()]) {
             dfs(v->getId(), visited);
         }
@@ -151,7 +155,7 @@ void Graph<T>::itrBypass() {
     stringstream stream;
     Iterator<T> *itr = getIterator();
     while (itr->hasNext()) {
-        stream << itr->current()->getId() << " " << itr->current()->getValue() << "\n";
+        stream << "Node id: " << itr->current()->getId() << ", node value: " << itr->current()->getValue() << "\n";
         itr->next();
     }
     cout << stream.str();

@@ -69,35 +69,31 @@ void UI::showMenu() {
 
 
 void UI::addIntNode() {
-    int value;
-    cout << "Enter node value\n";
-    cin >> value;
+    int value = enterInt("Enter node value\n");
     intGraph->addNode(value);
 }
 
 void UI::deleteIntNode() {
-    int id;
-    cout << "Enter id of node you want to delete\n";
-    cin >> id;
-    intGraph->removeNode(id);
+    int id = enterInt("Enter id of node you want to delete\n");
+    if (checkId(id)) {
+        intGraph->removeNode(id);
+    } else cout << "No such node\n";
 }
 
 void UI::addIntEdge() {
-    int from, to;
-    cout << "Enter first node id\n";
-    cin >> from;
-    cout << "Enter second node id\n";
-    cin >> to;
-    intGraph->addEdge(from, to);
+    int from = enterInt("Enter first node id\n");
+    int to = enterInt("Enter second node id\n");
+    if (checkId(from) && checkId(to)) {
+        intGraph->addEdge(from, to);
+    } else cout << "No such node\n";
 }
 
 void UI::deleteIntEdge() {
-    int from, to;
-    cout << "Enter first node id\n";
-    cin >> from;
-    cout << "Enter second node id\n";
-    cin >> to;
-    intGraph->removeEdge(from, to);
+    int from = enterInt("Enter first node id\n");
+    int to = enterInt("Enter second node id\n");
+    if (checkId(from) && checkId(to)) {
+        intGraph->removeEdge(from, to);
+    } else cout << "No such node\n";
 }
 
 void UI::addStrNode() {
@@ -108,35 +104,32 @@ void UI::addStrNode() {
 }
 
 void UI::deleteSrtNode() {
-    int id;
-    cout << "Enter id of node you want to delete\n";
-    cin >> id;
-    strGraph->removeNode(id);
+    int id = enterInt("Enter id of node you want to delete\n");
+    if (checkId(id)) {
+        strGraph->removeNode(id);
+    } else cout << "No such node\n";
 }
 
 void UI::addStrEdge() {
-    int from, to;
-    cout << "Enter first node id\n";
-    cin >> from;
-    cout << "Enter second node id\n";
-    cin >> to;
-    strGraph->addEdge(from, to);
+    int from = enterInt("Enter first node id\n");
+    int to = enterInt("Enter second node id\n");
+    if (checkId(from) && checkId(to)) {
+        strGraph->addEdge(from, to);
+    } else cout << "No such node\n";
 }
 
 void UI::deleteStrEdge() {
-    int from, to;
-    cout << "Enter first node id\n";
-    cin >> from;
-    cout << "Enter second node id\n";
-    cin >> to;
-    strGraph->removeEdge(from, to);
+    int from = enterInt("Enter first node id\n");
+    int to = enterInt("Enter second node id\n");
+    if (checkId(from) && checkId(to)) {
+        strGraph->removeEdge(from, to);
+    } else cout << "No such node\n";
 }
 
 char UI::chooseGraphForDFS() {
     char key;
     cout << "Choose graph: 1 - int graph, 2 - string graph\n";
     cin >> key;
-    key = '1';
     while (key != '1' && key != '2') {
         cout << "Wrong symbol, try again\n";
         cin >> key;
@@ -146,15 +139,36 @@ char UI::chooseGraphForDFS() {
 
 void UI::dfs() {
     char key = chooseGraphForDFS();
-    if (key == '1')
+    if (key == '1') {
         intGraph->depthSearch();
-    else strGraph->depthSearch();
+    } else strGraph->depthSearch();
 }
 
 void UI::passGraph() {
     char key = chooseGraphForDFS();
-    if (key == '1')
+    if (key == '1') {
         intGraph->itrBypass();
-    else strGraph->itrBypass();
+    } else strGraph->itrBypass();
+}
+
+int UI::enterInt(const std::string &msg) {
+    do {
+        int value;
+        cout << msg;
+        cin >> value;
+        bool check = cin.good();
+        if (check) {
+            return value;
+
+        } else {
+            cin.clear();
+            cin.ignore(INT_MAX, '\n');
+        }
+    } while (true);
+}
+
+bool UI::checkId(int id) {
+    return std::find(intGraph->getNodeIds().begin(),
+                     intGraph->getNodeIds().end(), id) != intGraph->getNodeIds().end();
 }
 

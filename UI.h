@@ -38,6 +38,10 @@ public:
 
     static char chooseGraphForDFS();
 
+    static int enterInt(const std::string& msg);
+
+    bool checkId(int id);
+
 };
 
 #endif
