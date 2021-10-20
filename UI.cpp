@@ -24,45 +24,42 @@ void UI::showMenu() {
              "10 - Pass by iterator\n"
              "11 - exit the program\n";
         cin >> key;
-        try {
-            switch (key) {
-                case 1:
-                    addIntNode();
-                    break;
-                case 2:
-                    deleteIntNode();
-                    break;
-                case 3:
-                    addIntEdge();
-                    break;
-                case 4:
-                    deleteIntEdge();
-                    break;
-                case 5:
-                    addStrNode();
-                    break;
-                case 6:
-                    deleteSrtNode();
-                    break;
-                case 7:
-                    addStrEdge();
-                    break;
-                case 8:
-                    deleteStrEdge();
-                    break;
-                case 9:
-                    dfs();
-                    break;
-                case 10:
-                    passGraph();
-                    break;
-                case 11:
-                    exit(0);
-                default:
-                    cout << "Wrong symbol, try again\n";
-            }
-        } catch (const char *c) {
-            cout << c;
+        switch (key) {
+            case 1:
+                addIntNode();
+                break;
+            case 2:
+                deleteIntNode();
+                break;
+            case 3:
+                addIntEdge();
+                break;
+            case 4:
+                deleteIntEdge();
+                break;
+            case 5:
+                addStrNode();
+                break;
+            case 6:
+                deleteSrtNode();
+                break;
+            case 7:
+                addStrEdge();
+                break;
+            case 8:
+                deleteStrEdge();
+                break;
+            case 9:
+                dfs();
+                break;
+            case 10:
+                passGraph();
+                break;
+            case 11:
+                exit(0);
+            default:
+                cout << "Wrong symbol, try again\n";
+                key = 1;
         }
     }
 }

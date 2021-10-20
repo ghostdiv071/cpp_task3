@@ -91,12 +91,7 @@ void Graph<T>::addEdge(int from, int to) {
 
 template<typename T>
 void Graph<T>::removeNode(int id) {
-    Node<T> *node;
-    try {
-        node = getNodeById(id);
-    } catch (std::out_of_range &e) {
-        cout << e.what() << endl;
-    }
+    Node<T> *node = getNodeById(id);
 
     for (int i = id; i <= nodes.size(); i++) {
         getNodeById(i)->setId(getNodeById(i)->getId() - 1);
@@ -144,7 +139,7 @@ void Graph<T>::dfs(int id, bool visited[]) {
 template<typename T>
 Node<T> *Graph<T>::getNodeById(int id) {
     try {
-        return nodes.at(id);
+        return nodes.at(id - 1);
     } catch (std::out_of_range&) {
         cout << "No such node\n";
     }
